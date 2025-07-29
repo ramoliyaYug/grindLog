@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.grindlog.presentation.components.DayCountdownTimer
 import com.example.grindlog.presentation.components.PlatformCard
 import com.example.grindlog.presentation.components.AnalysisCard
 import com.example.grindlog.presentation.components.JournalDialog
@@ -39,6 +40,10 @@ fun TodayScreen(
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
+        }
+
+        item {
+            DayCountdownTimer()
         }
 
         item {

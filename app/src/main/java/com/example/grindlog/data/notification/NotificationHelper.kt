@@ -22,6 +22,7 @@ class NotificationHelper @Inject constructor(
     companion object {
         const val REMINDER_CHANNEL_ID = "reminder_channel"
         const val CONTEST_CHANNEL_ID = "contest_channel"
+        const val DAILY_SUMMARY_CHANNEL_ID = "daily_summary_channel"
     }
 
     init {
@@ -46,8 +47,17 @@ class NotificationHelper @Inject constructor(
                 description = "Notifications for upcoming contests"
             }
 
+            val dailySummaryChannel = NotificationChannel(
+                DAILY_SUMMARY_CHANNEL_ID,
+                "Daily Summary",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Daily progress summary notifications"
+            }
+
             notificationManager.createNotificationChannel(reminderChannel)
             notificationManager.createNotificationChannel(contestChannel)
+            notificationManager.createNotificationChannel(dailySummaryChannel)
         }
     }
 
@@ -55,7 +65,8 @@ class NotificationHelper @Inject constructor(
         id: Int,
         title: String,
         content: String,
-        isContest: Boolean = false
+        isContest: Boolean = false,
+        isDailySummary: Boolean = false
     ) {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -68,15 +79,23 @@ class NotificationHelper @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val channelId = if (isContest) CONTEST_CHANNEL_ID else REMINDER_CHANNEL_ID
-        val icon = if (isContest) R.drawable.ic_launcher_foreground else R.drawable.ic_launcher_foreground
+        val channelId = when {
+            isDailySummary -> DAILY_SUMMARY_CHANNEL_ID
+            isContest -> CONTEST_CHANNEL_ID
+            else -> REMINDER_CHANNEL_ID
+        }
+
+        val icon = R.drawable.ic_launcher_foreground
 
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(icon)
             .setContentTitle(title)
             .setContentText(content)
             .setStyle(NotificationCompat.BigTextStyle().bigText(content))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(
+                if (isDailySummary) NotificationCompat.PRIORITY_DEFAULT
+                else NotificationCompat.PRIORITY_HIGH
+            )
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()
