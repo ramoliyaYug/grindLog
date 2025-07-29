@@ -39,7 +39,7 @@ class SplashActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            GrindlogTheme {
+            GrindlogTheme(enableFullscreen = true) {
                 SplashScreen {
                     startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                     finish()

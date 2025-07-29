@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            GrindlogTheme {
+            GrindlogTheme(enableFullscreen = true) {
                 MainScreen()
             }
         }
