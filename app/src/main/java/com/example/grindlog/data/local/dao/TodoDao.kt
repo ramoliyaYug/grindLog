@@ -30,4 +30,7 @@ interface TodoDao {
 
     @Query("DELETE FROM todos")
     suspend fun deleteAllTodos()
+
+    @Query("SELECT * FROM todos WHERE date >= :startDate AND date <= :endDate")
+    suspend fun getTodosInDateRange(startDate: Date, endDate: Date): List<Todo>
 }

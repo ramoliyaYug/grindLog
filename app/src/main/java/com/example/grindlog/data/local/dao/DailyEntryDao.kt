@@ -31,7 +31,12 @@ interface DailyEntryDao {
     @Query("DELETE FROM daily_entries")
     suspend fun deleteAllDailyEntries()
 
-    // Debug query to check data
     @Query("SELECT * FROM daily_entries WHERE leetcodeCount > 0 OR codeforcesCount > 0 OR codechefCount > 0 OR geeksforgeeksCount > 0")
     suspend fun getEntriesWithActivity(): List<DailyEntry>
+
+    @Query("SELECT * FROM daily_entries WHERE date >= :startDate AND date <= :endDate")
+    suspend fun getEntriesInDateRange(startDate: Date, endDate: Date): List<DailyEntry>
+
+    @Query("SELECT * FROM daily_entries ORDER BY date DESC LIMIT 10")
+    suspend fun getRecentEntries(): List<DailyEntry>
 }
