@@ -18,7 +18,7 @@ class NotificationSchedulerImpl @Inject constructor(
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     override suspend fun scheduleReminder(reminder: Reminder) {
-        scheduleReminderWithDelay(reminder, 60) // Default 1 hour before
+        scheduleReminderWithDelay(reminder, 60)
     }
 
     override suspend fun scheduleReminderWithDelay(reminder: Reminder, minutesBefore: Int) {
@@ -40,7 +40,6 @@ class NotificationSchedulerImpl @Inject constructor(
 
         val triggerTime = reminder.dateTime.time - (minutesBefore * 60 * 1000)
 
-        // Only schedule if the trigger time is in the future
         if (triggerTime > System.currentTimeMillis()) {
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
@@ -62,6 +61,6 @@ class NotificationSchedulerImpl @Inject constructor(
     }
 
     override suspend fun scheduleContestReminder(reminder: Reminder) {
-        scheduleReminderWithDelay(reminder, 60) // 1 hour before contest
+        scheduleReminderWithDelay(reminder, 60)
     }
 }

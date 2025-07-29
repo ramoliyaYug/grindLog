@@ -76,7 +76,6 @@ class ReminderViewModel @Inject constructor(
         viewModelScope.launch {
             val state = _uiState.value
             if (state.reminderTitle.isNotBlank() && state.selectedDate != null) {
-                // Combine date and time
                 val dateTime = combineDateTime(state.selectedDate!!, state.selectedTime)
 
                 val reminder = Reminder(
@@ -88,7 +87,6 @@ class ReminderViewModel @Inject constructor(
                 )
                 val reminderId = reminderRepository.insertReminder(reminder)
 
-                // Schedule notification with custom time before
                 notificationScheduler.scheduleReminderWithDelay(
                     reminder.copy(id = reminderId),
                     state.notifyBefore
@@ -128,7 +126,7 @@ class ReminderViewModel @Inject constructor(
             reminderRepository.updateReminder(updatedReminder)
 
             if (updatedReminder.isActive) {
-                notificationScheduler.scheduleReminderWithDelay(updatedReminder, 60) // Default 1 hour
+                notificationScheduler.scheduleReminderWithDelay(updatedReminder, 60)
             } else {
                 notificationScheduler.cancelReminder(updatedReminder.id)
             }
@@ -144,5 +142,5 @@ data class ReminderUiState(
     val selectedTime: String = "09:00",
     val selectedPlatform: String = "",
     val isContestReminder: Boolean = false,
-    val notifyBefore: Int = 60 // Minutes before
+    val notifyBefore: Int = 60
 )

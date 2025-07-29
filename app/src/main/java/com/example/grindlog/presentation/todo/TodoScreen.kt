@@ -57,7 +57,6 @@ fun TodoScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // View Mode Toggle
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -72,13 +71,11 @@ fun TodoScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Stats Card (only for today view)
         if (uiState.viewMode == TodoViewMode.TODAY) {
             TodoStatsCard(stats = todoStats)
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Todo List
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {

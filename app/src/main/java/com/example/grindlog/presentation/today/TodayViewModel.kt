@@ -8,7 +8,6 @@ import com.example.grindlog.data.repository.DailyEntryRepository
 import com.example.grindlog.data.repository.JournalNoteRepository
 import com.example.grindlog.domain.model.DailyAnalysis
 import com.example.grindlog.domain.usecase.GetDailyAnalysisUseCase
-import com.example.grindlog.domain.notification.DailySummaryScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -19,16 +18,8 @@ import javax.inject.Inject
 class TodayViewModel @Inject constructor(
     private val dailyEntryRepository: DailyEntryRepository,
     private val journalNoteRepository: JournalNoteRepository,
-    private val getDailyAnalysisUseCase: GetDailyAnalysisUseCase,
-    private val dailySummaryScheduler: DailySummaryScheduler
+    private val getDailyAnalysisUseCase: GetDailyAnalysisUseCase
 ) : ViewModel() {
-
-    init {
-        // Schedule daily summary notifications
-        viewModelScope.launch {
-            dailySummaryScheduler.scheduleDailySummary()
-        }
-    }
 
     private val today = Calendar.getInstance().apply {
         set(Calendar.HOUR_OF_DAY, 0)

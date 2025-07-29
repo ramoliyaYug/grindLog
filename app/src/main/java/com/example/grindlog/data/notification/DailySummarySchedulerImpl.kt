@@ -28,14 +28,12 @@ class DailySummarySchedulerImpl @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Schedule for 11:55 PM every day
         val calendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 23)
             set(Calendar.MINUTE, 55)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
 
-            // If it's already past 11:55 PM today, schedule for tomorrow
             if (timeInMillis <= System.currentTimeMillis()) {
                 add(Calendar.DAY_OF_YEAR, 1)
             }

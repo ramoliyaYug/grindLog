@@ -20,7 +20,7 @@ fun DayCountdownTimer() {
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(1000) // Update every second
+            delay(1000)
             timeLeft = getTimeLeftInDay()
         }
     }
@@ -64,7 +64,6 @@ fun DayCountdownTimer() {
                 }
             }
 
-            // Progress indicator showing day completion
             val dayProgress = getDayProgress()
             CircularProgressIndicator(
                 progress = dayProgress,

@@ -41,11 +41,9 @@ class DailySummaryReceiver : BroadcastReceiver() {
                     set(Calendar.MILLISECOND, 0)
                 }.time
 
-                // Get today's data
                 val dailyEntry = dailyEntryRepository.getDailyEntry(today)
                 val todos = todoRepository.getTodosByDate(today).first()
 
-                // Build analysis
                 val platformStats = if (dailyEntry != null) {
                     listOf(
                         PlatformStats("LeetCode", dailyEntry.leetcodeCount, dailyEntry.leetcodeTarget,
@@ -84,11 +82,9 @@ class DailySummaryReceiver : BroadcastReceiver() {
                     todoCompletionPercentage = todoCompletionPercentage
                 )
 
-                // Show summary notification
                 dailySummaryScheduler.showDailySummaryNotification(analysis)
 
             } catch (e: Exception) {
-                // Handle error silently or log it
             }
         }
     }

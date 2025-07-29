@@ -76,10 +76,8 @@ fun AddReminderDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Date Selection
                 OutlinedButton(
                     onClick = {
-                        // Set date to tomorrow by default if not selected
                         if (uiState.selectedDate == null) {
                             val tomorrow = Calendar.getInstance()
                             tomorrow.add(Calendar.DAY_OF_YEAR, 1)
@@ -99,7 +97,6 @@ fun AddReminderDialog(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Time Selection
                 OutlinedTextField(
                     value = uiState.selectedTime,
                     onValueChange = onTimeChange,
@@ -111,7 +108,6 @@ fun AddReminderDialog(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Notification timing
                 var expandedNotify by remember { mutableStateOf(false) }
                 ExposedDropdownMenuBox(
                     expanded = expandedNotify,

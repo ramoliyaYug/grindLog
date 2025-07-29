@@ -87,7 +87,6 @@ fun TargetDialog(
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
                         onClick = {
-                            // Save all targets at once
                             onAllTargetsChange(
                                 leetcodeTarget.toIntOrNull() ?: 0,
                                 codeforcesTarget.toIntOrNull() ?: 0,

@@ -60,23 +60,23 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Room DB
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
-    // Kotlin Extensions and Coroutines support for Room
+
     implementation("androidx.room:room-ktx:2.6.1")
 
-    // Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.51")
     kapt("com.google.dagger:hilt-compiler:2.51")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-    //viewmodel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
-    //gson
     implementation("com.google.code.gson:gson:2.10.1")
 
-    //meterial extended
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
+    implementation("androidx.compose.animation:animation:1.5.4")
+    implementation("androidx.compose.animation:animation-core:1.5.4")
 }

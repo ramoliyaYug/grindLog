@@ -18,7 +18,6 @@ class DateConverter {
         return date?.time
     }
 
-    // Debug helper
     fun formatDate(date: Date): String {
         return dateFormat.format(date)
     }
