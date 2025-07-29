@@ -69,12 +69,29 @@ class ProfileViewModel @Inject constructor(
     fun deleteJournalNote(note: JournalNote) {
         viewModelScope.launch {
             journalNoteRepository.deleteJournalNote(note)
+            hideJournalDetailDialog()
         }
+    }
+
+    fun showJournalDetailDialog(note: JournalNote) {
+        _uiState.value = _uiState.value.copy(
+            showJournalDetailDialog = true,
+            selectedJournalNote = note
+        )
+    }
+
+    fun hideJournalDetailDialog() {
+        _uiState.value = _uiState.value.copy(
+            showJournalDetailDialog = false,
+            selectedJournalNote = null
+        )
     }
 }
 
 data class ProfileUiState(
     val searchQuery: String = "",
     val showDeleteDataDialog: Boolean = false,
-    val isDarkTheme: Boolean = false
+    val isDarkTheme: Boolean = false,
+    val showJournalDetailDialog: Boolean = false,
+    val selectedJournalNote: JournalNote? = null
 )

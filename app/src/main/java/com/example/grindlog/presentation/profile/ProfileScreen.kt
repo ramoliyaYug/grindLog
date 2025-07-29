@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.grindlog.presentation.components.JournalNoteCard
+import com.example.grindlog.presentation.components.JournalNoteDetailDialog
 import com.example.grindlog.presentation.components.SettingsCard
 import com.example.grindlog.presentation.components.DeleteDataDialog
 
@@ -138,7 +139,8 @@ fun ProfileScreen(
         items(filteredJournalNotes) { note ->
             JournalNoteCard(
                 note = note,
-                onDelete = { viewModel.deleteJournalNote(note) }
+                onDelete = { viewModel.deleteJournalNote(note) },
+                onViewFull = { viewModel.showJournalDetailDialog(note) }
             )
         }
     }
@@ -147,6 +149,14 @@ fun ProfileScreen(
         DeleteDataDialog(
             onConfirm = viewModel::deleteAllData,
             onDismiss = viewModel::hideDeleteDataDialog
+        )
+    }
+
+    if (uiState.showJournalDetailDialog && uiState.selectedJournalNote != null) {
+        JournalNoteDetailDialog(
+            note = uiState.selectedJournalNote!!,
+            onDismiss = viewModel::hideJournalDetailDialog,
+            onDelete = { viewModel.deleteJournalNote(uiState.selectedJournalNote!!) }
         )
     }
 }
