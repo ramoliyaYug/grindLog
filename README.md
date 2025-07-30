@@ -28,63 +28,70 @@ GrindLog is your personal coding journal that helps you **track your DSA & CP pr
 ## ✨ Features
 
 <table>
-  <thead>
-    <tr>
-      <th>🗓️ Today Screen</th>
-      <th>⏰ Reminder Screen</th>
-      <th>📊 Analysis Screen</th>
-      <th>✅ To-Do Screen</th>
-      <th>👤 Profile Screen</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <ul>
-          <li>Log daily progress (LeetCode, Codeforces, CodeChef, GFG)</li>
-          <li>Set daily targets for each platform</li>
-          <li>View % of goal completion</li>
-          <li>Add daily journal note on what you've learned</li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li>Set reminders for upcoming contests</li>
-          <li>Create custom event reminders</li>
-          <li>Notifies 1 hour before via local notifications</li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li>Visual analytics with filters (week/month/year)</li>
-          <li>Platform-specific performance stats</li>
-          <li>Specific Date Filter:
-            <ul>
-              <li>Platform activity</li>
-              <li>Daily target achievement</li>
-              <li>To-do completion</li>
-            </ul>
-          </li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li>Create and manage daily to-dos</li>
-          <li>Track completion progress</li>
-          <li>View historical stats on productivity</li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li>View your data and journal notes</li>
-          <li>Theme toggle (light/dark)</li>
-          <li>Delete or reset app data</li>
-          <li>Filter notes by date/title</li>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
+  <tr>
+    <td>
+      <h3>🗓️ Today Screen</h3>
+      <ul>
+        <li>Log your daily progress (LeetCode, Codeforces, CodeChef, GFG)</li>
+        <li>Set daily targets for each platform</li>
+        <li>View % of goal completion</li>
+        <li>Add daily journal note on what you've learned</li>
+      </ul>
+    </td>
+    <td>
+      <h3>⏰ Reminder Screen</h3>
+      <ul>
+        <li>Set reminders for upcoming contests</li>
+        <li>Create custom event reminders</li>
+        <li>Notifies 1 hour before via local notifications</li>
+      </ul>
+    </td>
+    <td>
+      <h3>📊 Analysis Screen</h3>
+      <ul>
+        <li>Visual analytics with filters (week/month/year)</li>
+        <li>Platform-specific performance stats</li>
+        <li>Specific Date Filter:
+          <ul>
+            <li>Platform activity</li>
+            <li>Daily target achievement</li>
+            <li>To-do completion</li>
+          </ul>
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h3>✅ To-Do Screen</h3>
+      <ul>
+        <li>Create and manage daily to-dos</li>
+        <li>Track completion progress</li>
+        <li>View historical stats on productivity</li>
+      </ul>
+    </td>
+    <td>
+      <h3>👤 Profile Screen</h3>
+      <ul>
+        <li>View your data and journal notes</li>
+        <li>Theme toggle (light/dark)</li>
+        <li>Delete or reset app data</li>
+        <li>Filter notes by date/title</li>
+      </ul>
+    </td>
+    <td>
+      <h3>📬 Daily Summary</h3>
+      <ul>
+        <li>End-of-day notification summary</li>
+        <li>Includes progress stats & highlights</li>
+        <li>Delivers motivational quote based on % completion</li>
+      </ul>
+    </td>
+  </tr>
 </table>
+
+
+
 
 ---
 
