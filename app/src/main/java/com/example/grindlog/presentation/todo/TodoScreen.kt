@@ -1,20 +1,24 @@
 package com.example.grindlog.presentation.todo
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.grindlog.presentation.components.TodoCard
-import com.example.grindlog.presentation.components.AddTodoDialog
-import com.example.grindlog.presentation.components.TodoStatsCard
+import com.example.grindlog.presentation.components.*
+import com.example.grindlog.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,56 +35,109 @@ fun TodoScreen(
         TodoViewMode.ALL -> allTodos
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Todo",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
-
-            FloatingActionButton(
-                onClick = { viewModel.showAddTodoDialog() },
-                modifier = Modifier.size(56.dp)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Todo")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            TodoViewMode.values().forEach { mode ->
-                FilterChip(
-                    onClick = { viewModel.updateViewMode(mode) },
-                    label = { Text(mode.displayName) },
-                    selected = uiState.viewMode == mode
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.surface
+                    )
                 )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (uiState.viewMode == TodoViewMode.TODAY) {
-            TodoStatsCard(stats = todoStats)
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-
+            )
+    ) {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = "Todo List",
+                            style = MaterialTheme.typography.headlineLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            text = "Stay organized! ✅",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                        )
+                    }
+
+                    FloatingActionButton(
+                        onClick = { viewModel.showAddTodoDialog() },
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.White,
+                        elevation = FloatingActionButtonDefaults.elevation(
+                            defaultElevation = 12.dp,
+                            pressedElevation = 16.dp
+                        )
+                    ) {
+                        Icon(
+                            Icons.Default.Add,
+                            contentDescription = "Add Todo",
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
+                }
+            }
+
+            item {
+                PremiumCard(
+                    gradient = listOf(
+                        MaterialTheme.colorScheme.primaryContainer,
+                        MaterialTheme.colorScheme.secondaryContainer
+                    )
+                ) {
+                    Text(
+                        text = "View Mode",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        TodoViewMode.values().forEach { mode ->
+                            FilterChip(
+                                onClick = { viewModel.updateViewMode(mode) },
+                                label = {
+                                    Text(
+                                        mode.displayName,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                },
+                                selected = uiState.viewMode == mode,
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = MaterialTheme.colorScheme.primary,
+                                    selectedLabelColor = Color.White
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (uiState.viewMode == TodoViewMode.TODAY) {
+                item {
+                    PremiumTodoStatsCard(stats = todoStats)
+                }
+            }
+
             items(displayTodos) { todo ->
-                TodoCard(
+                PremiumTodoCard(
                     todo = todo,
                     onToggleCompletion = { viewModel.toggleTodoCompletion(todo) },
                     onDelete = { viewModel.deleteTodo(todo) }
@@ -89,27 +146,28 @@ fun TodoScreen(
 
             if (displayTodos.isEmpty()) {
                 item {
-                    Card(
-                        modifier = Modifier.fillMaxWidth()
+                    PremiumCard(
+                        gradient = listOf(
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                            MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+                        )
                     ) {
                         Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(32.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Icon(
-                                Icons.Default.CheckCircle,
-                                contentDescription = null,
-                                modifier = Modifier.size(64.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            Text(
+                                text = "✅",
+                                style = MaterialTheme.typography.headlineLarge,
+                                modifier = Modifier.padding(16.dp)
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
                             Text(
                                 text = if (uiState.viewMode == TodoViewMode.TODAY) "No todos for today" else "No todos yet",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
                             )
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = "Add your first todo to get started!",
                                 style = MaterialTheme.typography.bodyMedium,
@@ -118,6 +176,10 @@ fun TodoScreen(
                         }
                     }
                 }
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }

@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.grindlog.presentation.components.PlatformAnalyticsCard
 import com.example.grindlog.presentation.components.FilterChips
-import com.example.grindlog.presentation.components.SpecificDateAnalysisCard
 import com.example.grindlog.presentation.components.DatePickerDialog
+import com.example.grindlog.presentation.components.PremiumPlatformAnalyticsCard
+import com.example.grindlog.presentation.components.PremiumSpecificDateAnalysisCard
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -81,7 +81,7 @@ fun AnalysisScreen(
                 }
 
                 items(platformAnalytics) { analytics ->
-                    PlatformAnalyticsCard(analytics = analytics)
+                    PremiumPlatformAnalyticsCard(analytics = analytics)
                 }
 
                 if (platformAnalytics.isEmpty()) {
@@ -160,7 +160,7 @@ fun AnalysisScreen(
                     }
 
                     item {
-                        SpecificDateAnalysisCard(analysis = analysis)
+                        PremiumSpecificDateAnalysisCard(analysis = analysis)
                     }
 
                     items(analysis.platformStats) { platformStat ->

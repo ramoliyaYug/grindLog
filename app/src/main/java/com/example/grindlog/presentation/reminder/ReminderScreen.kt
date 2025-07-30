@@ -1,19 +1,26 @@
 package com.example.grindlog.presentation.reminder
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.grindlog.presentation.components.ReminderCard
+import com.example.grindlog.presentation.components.PremiumReminderCard
 import com.example.grindlog.presentation.components.AddReminderDialog
+import com.example.grindlog.presentation.components.PremiumCard
+import com.example.grindlog.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,73 +31,175 @@ fun ReminderScreen(
     val reminders by viewModel.reminders.collectAsState()
     val upcomingReminders by viewModel.upcomingReminders.collectAsState()
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Reminders",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
-
-            FloatingActionButton(
-                onClick = { viewModel.showAddReminderDialog() },
-                modifier = Modifier.size(56.dp)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Reminder")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (upcomingReminders.isNotEmpty()) {
-            Text(
-                text = "Upcoming",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(upcomingReminders) { reminder ->
-                ReminderCard(
-                    reminder = reminder,
-                    isUpcoming = true,
-                    onToggleActive = { viewModel.toggleReminderActive(reminder) },
-                    onDelete = { viewModel.deleteReminder(reminder) }
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.surface
+                    )
                 )
+            )
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = "Reminders",
+                            style = MaterialTheme.typography.headlineLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            text = "Never miss a contest! ⏰",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                        )
+                    }
+
+                    FloatingActionButton(
+                        onClick = { viewModel.showAddReminderDialog() },
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.White,
+                        elevation = FloatingActionButtonDefaults.elevation(
+                            defaultElevation = 12.dp,
+                            pressedElevation = 16.dp
+                        )
+                    ) {
+                        Icon(
+                            Icons.Default.Add,
+                            contentDescription = "Add Reminder",
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
+                }
+            }
+
+            if (upcomingReminders.isNotEmpty()) {
+                item {
+                    PremiumCard(
+                        gradient = listOf(
+                            PremiumPurple,
+                            PremiumBlue
+                        )
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.Upcoming,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(28.dp)
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = "🔥 Upcoming Reminders",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
+
+                items(upcomingReminders) { reminder ->
+                    PremiumReminderCard(
+                        reminder = reminder,
+                        isUpcoming = true,
+                        onToggleActive = { viewModel.toggleReminderActive(reminder) },
+                        onDelete = { viewModel.deleteReminder(reminder) }
+                    )
+                }
             }
 
             if (upcomingReminders.isNotEmpty() && reminders.size > upcomingReminders.size) {
                 item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "All Reminders",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    PremiumCard(
+                        gradient = listOf(
+                            MaterialTheme.colorScheme.surfaceVariant,
+                            MaterialTheme.colorScheme.surface
+                        )
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.History,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = "All Reminders",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
                 }
             }
 
-            items(reminders.filter { !upcomingReminders.contains(it) }) { reminder ->
-                ReminderCard(
+            val otherReminders = reminders.filter { !upcomingReminders.contains(it) }
+            items(otherReminders) { reminder ->
+                PremiumReminderCard(
                     reminder = reminder,
                     isUpcoming = false,
                     onToggleActive = { viewModel.toggleReminderActive(reminder) },
                     onDelete = { viewModel.deleteReminder(reminder) }
                 )
+            }
+
+            if (reminders.isEmpty()) {
+                item {
+                    PremiumCard(
+                        gradient = listOf(
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                            MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+                        )
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "⏰",
+                                style = MaterialTheme.typography.headlineLarge,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                            Text(
+                                text = "No reminders yet",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Add your first reminder to never miss important events!",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }

@@ -19,33 +19,76 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = PremiumPurple,
+    onPrimary = Color.White,
+    primaryContainer = PremiumPurpleVariant,
+    onPrimaryContainer = Color.White,
+
+    secondary = PremiumTeal,
+    onSecondary = Color.White,
+    secondaryContainer = Color(0xFF164E63),
+    onSecondaryContainer = PremiumTealLight,
+
+    tertiary = PremiumGreen,
+    onTertiary = Color.White,
+    tertiaryContainer = Color(0xFF064E3B),
+    onTertiaryContainer = PremiumGreenLight,
+
+    background = PremiumBackground,
+    onBackground = PremiumGray100,
+
+    surface = PremiumSurface,
+    onSurface = PremiumGray100,
+    surfaceVariant = PremiumSurfaceVariant,
+    onSurfaceVariant = PremiumGray300,
+
+    error = PremiumRed,
+    onError = Color.White,
+    errorContainer = Color(0xFF7F1D1D),
+    onErrorContainer = Color(0xFFFECACA),
+
+    outline = PremiumGray600,
+    outlineVariant = PremiumGray700
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = PremiumPurpleVariant,
     onPrimary = Color.White,
+    primaryContainer = Color(0xFFEDE9FE),
+    onPrimaryContainer = PremiumPurpleVariant,
+
+    secondary = PremiumTeal,
     onSecondary = Color.White,
+    secondaryContainer = Color(0xFFCFFAFE),
+    onSecondaryContainer = Color(0xFF164E63),
+
+    tertiary = PremiumGreen,
     onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    tertiaryContainer = Color(0xFFD1FAE5),
+    onTertiaryContainer = Color(0xFF064E3B),
+
+    background = PremiumGray50,
+    onBackground = PremiumGray900,
+
+    surface = Color.White,
+    onSurface = PremiumGray900,
+    surfaceVariant = PremiumGray100,
+    onSurfaceVariant = PremiumGray600,
+
+    error = PremiumRed,
+    onError = Color.White,
+    errorContainer = Color(0xFFFEE2E2),
+    onErrorContainer = Color(0xFF7F1D1D),
+
+    outline = PremiumGray400,
+    outlineVariant = PremiumGray200
 )
 
 @Composable
 fun GrindlogTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    enableFullscreen: Boolean = false,
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
+    isFullScreen: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -53,7 +96,6 @@ fun GrindlogTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
@@ -63,17 +105,22 @@ fun GrindlogTheme(
         SideEffect {
             val window = (view.context as Activity).window
 
-            if (enableFullscreen) {
-                WindowCompat.setDecorFitsSystemWindows(window, false)
-                window.statusBarColor = Color.Transparent.toArgb()
-                window.navigationBarColor = Color.Transparent.toArgb()
+            window.statusBarColor = Color.Transparent.toArgb()
+            window.navigationBarColor = Color.Transparent.toArgb()
 
-                val controller = WindowInsetsControllerCompat(window, view)
-                controller.hide(WindowInsetsCompat.Type.systemBars())
-                controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            val windowInsetsController = WindowCompat.getInsetsController(window, view)
+
+            windowInsetsController.isAppearanceLightStatusBars = !darkTheme
+            windowInsetsController.isAppearanceLightNavigationBars = !darkTheme
+
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+
+            if (isFullScreen) {
+                windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+                windowInsetsController.systemBarsBehavior =
+                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             } else {
-                window.statusBarColor = colorScheme.primary.toArgb()
-                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+                windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
             }
         }
     }

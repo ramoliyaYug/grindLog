@@ -4,10 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -29,7 +32,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            GrindlogTheme(enableFullscreen = true) {
+            GrindlogTheme(isFullScreen = true) {
                 MainScreen()
             }
         }
@@ -52,14 +55,33 @@ fun MainScreen() {
     )
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.systemBars),
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface,
+                tonalElevation = 8.dp
+            ) {
                 bottomNavItems.forEach { item ->
+                    val isSelected = currentDestination?.hierarchy?.any { it.route == item.route } == true
+
                     NavigationBarItem(
-                        icon = { Icon(item.icon, contentDescription = item.title) },
-                        label = { Text(item.title) },
-                        selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                        icon = {
+                            Icon(
+                                item.icon,
+                                contentDescription = item.title,
+                                modifier = Modifier.size(if (isSelected) 26.dp else 22.dp)
+                            )
+                        },
+                        label = {
+                            Text(
+                                item.title,
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        },
+                        selected = isSelected,
                         onClick = {
                             navController.navigate(item.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
@@ -68,31 +90,51 @@ fun MainScreen() {
                                 launchSingleTop = true
                                 restoreState = true
                             }
-                        }
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.primary,
+                            selectedTextColor = MaterialTheme.colorScheme.primary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            indicatorColor = MaterialTheme.colorScheme.primaryContainer
+                        )
                     )
                 }
             }
         }
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = BottomNavItem.Today.route,
-            modifier = Modifier.padding(innerPadding)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.background,
+                            MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+                        )
+                    )
+                )
         ) {
-            composable(BottomNavItem.Today.route) {
-                TodayScreen()
-            }
-            composable(BottomNavItem.Reminder.route) {
-                ReminderScreen()
-            }
-            composable(BottomNavItem.Analysis.route) {
-                AnalysisScreen()
-            }
-            composable(BottomNavItem.Todo.route) {
-                TodoScreen()
-            }
-            composable(BottomNavItem.Profile.route) {
-                ProfileScreen()
+            NavHost(
+                navController = navController,
+                startDestination = BottomNavItem.Today.route
+            ) {
+                composable(BottomNavItem.Today.route) {
+                    TodayScreen()
+                }
+                composable(BottomNavItem.Reminder.route) {
+                    ReminderScreen()
+                }
+                composable(BottomNavItem.Analysis.route) {
+                    AnalysisScreen()
+                }
+                composable(BottomNavItem.Todo.route) {
+                    TodoScreen()
+                }
+                composable(BottomNavItem.Profile.route) {
+                    ProfileScreen()
+                }
             }
         }
     }

@@ -39,7 +39,7 @@ class SplashActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            GrindlogTheme(enableFullscreen = true) {
+            GrindlogTheme(isFullScreen = true) {
                 SplashScreen {
                     startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                     finish()
@@ -95,6 +95,7 @@ fun SplashScreen(onAnimationEnd: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.systemBars)
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(

@@ -37,6 +37,8 @@ class NotificationHelper @Inject constructor(
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "Notifications for custom reminders"
+                enableVibration(true)
+                enableLights(true)
             }
 
             val contestChannel = NotificationChannel(
@@ -45,6 +47,8 @@ class NotificationHelper @Inject constructor(
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "Notifications for upcoming contests"
+                enableVibration(true)
+                enableLights(true)
             }
 
             val dailySummaryChannel = NotificationChannel(
@@ -68,38 +72,64 @@ class NotificationHelper @Inject constructor(
         isContest: Boolean = false,
         isDailySummary: Boolean = false
     ) {
-        val intent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+        try {
+            val intent = Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
 
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            id,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val channelId = when {
-            isDailySummary -> DAILY_SUMMARY_CHANNEL_ID
-            isContest -> CONTEST_CHANNEL_ID
-            else -> REMINDER_CHANNEL_ID
-        }
-
-        val icon = R.drawable.ic_launcher_foreground
-
-        val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(icon)
-            .setContentTitle(title)
-            .setContentText(content)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(content))
-            .setPriority(
-                if (isDailySummary) NotificationCompat.PRIORITY_DEFAULT
-                else NotificationCompat.PRIORITY_HIGH
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                id,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .build()
 
-        notificationManager.notify(id, notification)
+            val channelId = when {
+                isDailySummary -> DAILY_SUMMARY_CHANNEL_ID
+                isContest -> CONTEST_CHANNEL_ID
+                else -> REMINDER_CHANNEL_ID
+            }
+
+            val icon = R.drawable.ic_launcher_foreground
+
+            val notification = NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(icon)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(content))
+                .setPriority(
+                    if (isDailySummary) NotificationCompat.PRIORITY_DEFAULT
+                    else NotificationCompat.PRIORITY_HIGH
+                )
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .build()
+
+            notificationManager.notify(id, notification)
+
+            // Log successful notification
+            println("✅ Notification sent successfully - ID: $id, Title: $title")
+
+        } catch (e: Exception) {
+            println("❌ Failed to send notification: ${e.message}")
+            throw e
+        }
+    }
+
+    fun areNotificationsEnabled(): Boolean {
+        return notificationManager.areNotificationsEnabled()
+    }
+
+    fun getNotificationChannelStatus(): Map<String, Boolean> {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mapOf(
+                "Reminders" to (notificationManager.getNotificationChannel(REMINDER_CHANNEL_ID)?.importance != NotificationManager.IMPORTANCE_NONE),
+                "Contests" to (notificationManager.getNotificationChannel(CONTEST_CHANNEL_ID)?.importance != NotificationManager.IMPORTANCE_NONE),
+                "Daily Summary" to (notificationManager.getNotificationChannel(DAILY_SUMMARY_CHANNEL_ID)?.importance != NotificationManager.IMPORTANCE_NONE)
+            )
+        } else {
+            mapOf("All Notifications" to areNotificationsEnabled())
+        }
     }
 }
