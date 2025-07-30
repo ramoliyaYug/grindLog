@@ -1,6 +1,6 @@
 # 🚀 GrindLog - Daily Journal for DSA & Competitive Coders
 
-GrindLog is your personal coding journal that helps you **track your DSA & CP progress**, **set daily targets**, **analyze performance**, and **stay consistent** — all in a clean and intuitive interface built with **Kotlin**, **Jetpack Compose**, and **RoomDB**.
+GrindLog is your personal coding journal that helps you **track your DSA & CP progress**, **set daily targets**, **analyze performance**, and **stay consistent** - all in a clean and intuitive interface built with **Kotlin**, **Jetpack Compose**, and **RoomDB**.
 
 > 💡 Designed for LeetCode, Codeforces, CodeChef, and GFG enthusiasts who want to take their grind seriously.
 
