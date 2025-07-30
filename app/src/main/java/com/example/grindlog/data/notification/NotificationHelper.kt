@@ -108,7 +108,6 @@ class NotificationHelper @Inject constructor(
 
             notificationManager.notify(id, notification)
 
-            // Log successful notification
             println("✅ Notification sent successfully - ID: $id, Title: $title")
 
         } catch (e: Exception) {

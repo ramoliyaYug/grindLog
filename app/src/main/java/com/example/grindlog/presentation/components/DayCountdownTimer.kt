@@ -27,7 +27,7 @@ fun DayCountdownTimer() {
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(1000) // Update every second
+            delay(1000)
             timeLeft = getTimeLeftInDay()
         }
     }
@@ -108,7 +108,6 @@ fun DayCountdownTimer() {
                     }
                 }
 
-                // Enhanced progress indicator
                 Box(
                     contentAlignment = Alignment.Center
                 ) {
