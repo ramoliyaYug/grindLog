@@ -25,6 +25,16 @@ GrindLog is your personal coding journal that helps you **track your DSA & CP pr
 </table>
 
 ---
+
+## 📦 Download APK
+
+📲 **Click below to get the latest release of GrindLog:**
+
+🔗 [**👉 Download GrindLog APK**](https://ramoliyayug.github.io/appMandi/GrindLog/grindLog.html)
+
+
+---
+
 ## ✨ Features
 
 <table>
